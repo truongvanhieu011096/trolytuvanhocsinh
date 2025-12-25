@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trợ lý tư vấn học sinh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+    }
+    .chat-header {
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 12px 12px 0 0;
+    }
+    #chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+    .user, .bot {
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      max-width: 90%;
+      white-space: pre-line;
+    }
+    .user {
+      background: #dbeafe;
+      align-self: flex-end;
+    }
+    .bot {
+      background: #e5e7eb;
+      align-self: flex-start;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    #chat-input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+    .support-actions {
+      text-align: center;
+      padding: 8px;
+    }
+    .call-btn {
+      display: inline-block;
+      background: #dc2626;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">
+    Trợ lý tư vấn học sinh – Thầy cô lắng nghe em
+  </div>
+
+  <div id="chat-box">
+    <div class="bot">
+      Chào em. Nếu em đang gặp khó khăn hay cảm thấy không ổn, em có thể chia sẻ với thầy cô tại đây nhé.
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      id="chat-input"
+      type="text"
+      placeholder="Em có thể chia sẻ điều đang làm em lo lắng..."
+    />
+  </div>
+
+  <div class="support-actions">
+    <a href="tel:0336175393" class="call-btn">📞 Gọi thầy cô hỗ trợ</a>
+  </div>
+</div>
+
+<script src="responses.js"></script>
+<script src="chat.js"></script>
+
+</body>
+</html>
