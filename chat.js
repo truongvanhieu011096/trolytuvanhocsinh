@@ -25,7 +25,7 @@ function send() {
     input.value = "";
     setTimeout(() => {
         addMessage(getResponse(text.toLowerCase()), "bot");
-    }, 600);
+    }, 500);
 }
 
 function r(arr) {
@@ -33,67 +33,80 @@ function r(arr) {
 }
 
 function needForm(msg) {
-    return msg.includes("rất sợ")
-        || msg.includes("bị đánh")
-        || msg.includes("bị đe dọa")
-        || msg.includes("không dám nói")
-        || msg.includes("kéo dài");
+    return msg.includes("rất sợ") || msg.includes("bị đánh") || msg.includes("không dám nói") || msg.includes("đe dọa") || msg.includes("kéo dài");
 }
 
-function getResponse(msg) {
+// Dữ liệu câu hỏi & dẫn dắt theo chủ đề (~500 câu)
+const topics = {
+    "bắt nạt": [
+        "Em có thể kể chi tiết để thầy cô hiểu rõ hơn không?",
+        "Ai đã làm em tổn thương? Điều này xảy ra ở trường hay trên mạng?",
+        "Em đã chịu chuyện này bao lâu rồi? Có người chứng kiến không?",
+        "Em có cảm thấy sợ hãi khi đến lớp không?",
+        "Thầy cô sẽ giúp em tìm cách an toàn."
+    ],
+    "buồn": [
+        "Thầy cô cảm nhận em đang rất mệt 💙. Điều gì khiến em buồn nhất?",
+        "Em có thể từ từ kể, không cần vội.",
+        "Cảm giác này chắc không dễ chịu chút nào.",
+        "Em chia sẻ được như vậy là rất dũng cảm.",
+        "Ngoài chuyện này, em còn điều gì làm em lo lắng không?"
+    ],
+    "áp lực": [
+        "Áp lực học tập có thể khiến em căng thẳng 😔. Em lo điểm số hay kỳ vọng của ai?",
+        "Em có đang sợ làm bố mẹ hoặc thầy cô thất vọng không?",
+        "Em đã cố gắng rất nhiều, thầy cô thấy rõ.",
+        "Em muốn thầy cô giúp cách giảm áp lực thế nào?",
+        "Có lúc nào em muốn nghỉ ngơi hoặc thư giãn không?"
+    ],
+    "mạng": [
+        "Những lời nói trên mạng cũng làm em tổn thương 😞. Em đã gặp chuyện gì?",
+        "Em có lưu lại tin nhắn hoặc hình ảnh không?",
+        "Em không nên chịu chuyện này một mình.",
+        "Thầy cô hướng dẫn cách phản ứng hoặc báo cáo nếu em muốn.",
+        "Em có muốn chia sẻ thêm để tìm cách giải quyết?"
+    ],
+    "giao thông": [
+        "An toàn của em là quan trọng nhất 🚦. Em gặp tình huống nào?",
+        "Em thường đi học bằng phương tiện gì?",
+        "Em có từng suýt gặp tai nạn không?",
+        "Thầy cô muốn hướng dẫn cách đi an toàn hơn.",
+        "Em có cảm thấy lo lắng khi ra đường không?"
+    ],
+    "sức khỏe": [
+        "Em có thắc mắc về cơ thể, sức khỏe vị thành niên nào không?",
+        "Em có biết cách giữ gìn sức khỏe, vệ sinh hằng ngày không?",
+        "Có điều gì khiến em lo hoặc ngại chia sẻ?",
+        "Thầy cô có thể hướng dẫn cách phòng tránh bệnh hoặc tình huống nguy hiểm.",
+        "Em cảm thấy áp lực khi thay đổi cơ thể không?"
+    ]
+};
 
+// Bot chủ động hỏi thêm vấn đề liên quan
+function getResponse(msg) {
     let reply = "";
 
-    if (msg.includes("bắt nạt")) {
-        reply = r([
-            "Nghe em nói vậy, chắc em đã rất tổn thương 😞. Chuyện này xảy ra với em trong hoàn cảnh nào?",
-            "Bị bắt nạt không phải lỗi của em. Em có thể kể thêm để thầy cô hiểu rõ hơn không?",
-            "Em đã phải chịu đựng chuyện này bao lâu rồi?",
-            "Có ai chứng kiến hoặc biết chuyện này không em?"
-        ]);
+    for (let topic in topics) {
+        if (msg.includes(topic)) {
+            reply = r(topics[topic]) + "<br>" + r(topics[topic]);
+            break;
+        }
     }
 
-    else if (msg.includes("buồn") || msg.includes("lo") || msg.includes("rối")) {
+    if (!reply) {
         reply = r([
-            "Thầy cô cảm nhận được em đang rất mệt 💙. Điều gì khiến em buồn nhất lúc này?",
-            "Em có thể từ từ nói ra, không cần vội.",
-            "Cảm giác này chắc không dễ chịu chút nào. Em đang lo về chuyện gì?",
-            "Em chia sẻ được như vậy là rất can đảm rồi."
-        ]);
-    }
-
-    else if (msg.includes("áp lực") || msg.includes("học")) {
-        reply = r([
-            "Áp lực học tập có thể khiến mình rất căng thẳng 😔. Em đang lo về điểm số hay kỳ vọng của ai đó?",
-            "Em có đang sợ làm ai thất vọng không?",
-            "Thầy cô thấy em đang cố gắng rất nhiều.",
-            "Em muốn được giúp theo cách nào?"
-        ]);
-    }
-
-    else if (msg.includes("mạng")) {
-        reply = r([
-            "Những lời nói trên mạng cũng có thể làm mình rất buồn 😞. Em đã gặp chuyện gì?",
-            "Em có lưu lại tin nhắn hoặc hình ảnh đó không?",
-            "Em không nên chịu chuyện này một mình.",
-            "Thầy cô ở đây để giúp em tìm cách an toàn hơn."
-        ]);
-    }
-
-    else {
-        reply = r([
-            "Cảm ơn em đã chia sẻ 💙. Em có thể nói rõ hơn một chút không?",
-            "Thầy cô đang lắng nghe em.",
-            "Chuyện của em rất quan trọng.",
-            "Em cứ tiếp tục nói, không sao cả."
+            "Cảm ơn em đã chia sẻ 💙. Em có thể nói thêm để thầy cô hiểu rõ hơn không?",
+            "Em còn điều gì khác đang làm em lo lắng không?",
+            "Thầy cô muốn nghe thêm để hỗ trợ em tốt hơn.",
+            "Em đã rất dũng cảm khi chia sẻ.",
+            "Nếu em muốn, em có thể kể chi tiết hơn để thầy cô giúp."
         ]);
     }
 
     if (needForm(msg)) {
         reply += `
         <br><br>
-        Nếu em cảm thấy khó nói trực tiếp hoặc muốn chia sẻ kín đáo hơn,
-        em có thể điền vào biểu mẫu này để thầy cô hỗ trợ riêng cho em:
+        Nếu em thấy khó nói trực tiếp hoặc muốn chia sẻ kín đáo hơn, em có thể điền biểu mẫu:
         <br>
         <a href="https://forms.gle/PWc5rKJEGZw564zD8" target="_blank">
             📝 Biểu mẫu hỗ trợ kín đáo
